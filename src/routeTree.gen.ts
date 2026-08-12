@@ -14,7 +14,11 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as MapRouteImport } from './routes/map'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as ReportsIndexRouteImport } from './routes/reports.index'
+import { Route as ReportsIdRouteImport } from './routes/reports.$id'
+import { Route as WaterBodiesIdRouteImport } from './routes/water-bodies.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -41,9 +45,29 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MapRoute = MapRouteImport.update({
+  id: '/map',
+  path: '/map',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsIndexRoute = ReportsIndexRouteImport.update({
+  id: '/reports/',
+  path: '/reports/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsIdRoute = ReportsIdRouteImport.update({
+  id: '/reports/$id',
+  path: '/reports/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WaterBodiesIdRoute = WaterBodiesIdRouteImport.update({
+  id: '/water-bodies/$id',
+  path: '/water-bodies/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -53,7 +77,11 @@ export interface FileRoutesByFullPath {
   '/explore': typeof ExploreRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
+  '/map': typeof MapRoute
   '/register': typeof RegisterRoute
+  '/reports/$id': typeof ReportsIdRoute
+  '/water-bodies/$id': typeof WaterBodiesIdRoute
+  '/reports/': typeof ReportsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -61,7 +89,11 @@ export interface FileRoutesByTo {
   '/explore': typeof ExploreRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
+  '/map': typeof MapRoute
   '/register': typeof RegisterRoute
+  '/reports/$id': typeof ReportsIdRoute
+  '/water-bodies/$id': typeof WaterBodiesIdRoute
+  '/reports': typeof ReportsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -70,14 +102,37 @@ export interface FileRoutesById {
   '/explore': typeof ExploreRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
+  '/map': typeof MapRoute
   '/register': typeof RegisterRoute
+  '/reports/$id': typeof ReportsIdRoute
+  '/water-bodies/$id': typeof WaterBodiesIdRoute
+  '/reports/': typeof ReportsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/about' | '/explore' | '/how-it-works' | '/login' | '/register'
+    | '/'
+    | '/about'
+    | '/explore'
+    | '/how-it-works'
+    | '/login'
+    | '/map'
+    | '/register'
+    | '/reports/$id'
+    | '/water-bodies/$id'
+    | '/reports/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/explore' | '/how-it-works' | '/login' | '/register'
+  to:
+    | '/'
+    | '/about'
+    | '/explore'
+    | '/how-it-works'
+    | '/login'
+    | '/map'
+    | '/register'
+    | '/reports/$id'
+    | '/water-bodies/$id'
+    | '/reports'
   id:
     | '__root__'
     | '/'
@@ -85,7 +140,11 @@ export interface FileRouteTypes {
     | '/explore'
     | '/how-it-works'
     | '/login'
+    | '/map'
     | '/register'
+    | '/reports/$id'
+    | '/water-bodies/$id'
+    | '/reports/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -94,7 +153,11 @@ export interface RootRouteChildren {
   ExploreRoute: typeof ExploreRoute
   HowItWorksRoute: typeof HowItWorksRoute
   LoginRoute: typeof LoginRoute
+  MapRoute: typeof MapRoute
   RegisterRoute: typeof RegisterRoute
+  ReportsIdRoute: typeof ReportsIdRoute
+  WaterBodiesIdRoute: typeof WaterBodiesIdRoute
+  ReportsIndexRoute: typeof ReportsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -134,11 +197,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/map': {
+      id: '/map'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof MapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports/': {
+      id: '/reports/'
+      path: '/reports'
+      fullPath: '/reports/'
+      preLoaderRoute: typeof ReportsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports/$id': {
+      id: '/reports/$id'
+      path: '/reports/$id'
+      fullPath: '/reports/$id'
+      preLoaderRoute: typeof ReportsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/water-bodies/$id': {
+      id: '/water-bodies/$id'
+      path: '/water-bodies/$id'
+      fullPath: '/water-bodies/$id'
+      preLoaderRoute: typeof WaterBodiesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -150,7 +241,11 @@ const rootRouteChildren: RootRouteChildren = {
   ExploreRoute: ExploreRoute,
   HowItWorksRoute: HowItWorksRoute,
   LoginRoute: LoginRoute,
+  MapRoute: MapRoute,
   RegisterRoute: RegisterRoute,
+  ReportsIdRoute: ReportsIdRoute,
+  WaterBodiesIdRoute: WaterBodiesIdRoute,
+  ReportsIndexRoute: ReportsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
