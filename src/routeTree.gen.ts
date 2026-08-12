@@ -11,11 +11,23 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AnalyticsRouteImport } from './routes/analytics'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MapRouteImport } from './routes/map'
+import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as ReportRouteImport } from './routes/report'
+import { Route as VerifyRouteImport } from './routes/verify'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminAuditRouteImport } from './routes/admin.audit'
+import { Route as AdminDepartmentsRouteImport } from './routes/admin.departments'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AuthorityIndexRouteImport } from './routes/authority.index'
+import { Route as AuthorityIssuesRouteImport } from './routes/authority.issues'
 import { Route as ReportsIndexRouteImport } from './routes/reports.index'
 import { Route as ReportsIdRouteImport } from './routes/reports.$id'
 import { Route as WaterBodiesIdRouteImport } from './routes/water-bodies.$id'
@@ -28,6 +40,16 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalyticsRoute = AnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExploreRoute = ExploreRouteImport.update({
@@ -50,9 +72,59 @@ const MapRoute = MapRouteImport.update({
   path: '/map',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportRoute = ReportRouteImport.update({
+  id: '/report',
+  path: '/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyRoute = VerifyRouteImport.update({
+  id: '/verify',
+  path: '/verify',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminAuditRoute = AdminAuditRouteImport.update({
+  id: '/admin/audit',
+  path: '/admin/audit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminDepartmentsRoute = AdminDepartmentsRouteImport.update({
+  id: '/admin/departments',
+  path: '/admin/departments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthorityIndexRoute = AuthorityIndexRouteImport.update({
+  id: '/authority/',
+  path: '/authority/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthorityIssuesRoute = AuthorityIssuesRouteImport.update({
+  id: '/authority/issues',
+  path: '/authority/issues',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReportsIndexRoute = ReportsIndexRouteImport.update({
@@ -74,38 +146,74 @@ const WaterBodiesIdRoute = WaterBodiesIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/analytics': typeof AnalyticsRoute
+  '/dashboard': typeof DashboardRoute
   '/explore': typeof ExploreRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
   '/map': typeof MapRoute
+  '/notifications': typeof NotificationsRoute
+  '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/report': typeof ReportRoute
+  '/verify': typeof VerifyRoute
+  '/admin/audit': typeof AdminAuditRoute
+  '/admin/departments': typeof AdminDepartmentsRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/authority/issues': typeof AuthorityIssuesRoute
   '/reports/$id': typeof ReportsIdRoute
   '/water-bodies/$id': typeof WaterBodiesIdRoute
+  '/admin/': typeof AdminIndexRoute
+  '/authority/': typeof AuthorityIndexRoute
   '/reports/': typeof ReportsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/analytics': typeof AnalyticsRoute
+  '/dashboard': typeof DashboardRoute
   '/explore': typeof ExploreRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
   '/map': typeof MapRoute
+  '/notifications': typeof NotificationsRoute
+  '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/report': typeof ReportRoute
+  '/verify': typeof VerifyRoute
+  '/admin/audit': typeof AdminAuditRoute
+  '/admin/departments': typeof AdminDepartmentsRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/authority/issues': typeof AuthorityIssuesRoute
   '/reports/$id': typeof ReportsIdRoute
   '/water-bodies/$id': typeof WaterBodiesIdRoute
+  '/admin': typeof AdminIndexRoute
+  '/authority': typeof AuthorityIndexRoute
   '/reports': typeof ReportsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/analytics': typeof AnalyticsRoute
+  '/dashboard': typeof DashboardRoute
   '/explore': typeof ExploreRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
   '/map': typeof MapRoute
+  '/notifications': typeof NotificationsRoute
+  '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/report': typeof ReportRoute
+  '/verify': typeof VerifyRoute
+  '/admin/audit': typeof AdminAuditRoute
+  '/admin/departments': typeof AdminDepartmentsRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/authority/issues': typeof AuthorityIssuesRoute
   '/reports/$id': typeof ReportsIdRoute
   '/water-bodies/$id': typeof WaterBodiesIdRoute
+  '/admin/': typeof AdminIndexRoute
+  '/authority/': typeof AuthorityIndexRoute
   '/reports/': typeof ReportsIndexRoute
 }
 export interface FileRouteTypes {
@@ -113,50 +221,98 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/analytics'
+    | '/dashboard'
     | '/explore'
     | '/how-it-works'
     | '/login'
     | '/map'
+    | '/notifications'
+    | '/profile'
     | '/register'
+    | '/report'
+    | '/verify'
+    | '/admin/audit'
+    | '/admin/departments'
+    | '/admin/users'
+    | '/authority/issues'
     | '/reports/$id'
     | '/water-bodies/$id'
+    | '/admin/'
+    | '/authority/'
     | '/reports/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/analytics'
+    | '/dashboard'
     | '/explore'
     | '/how-it-works'
     | '/login'
     | '/map'
+    | '/notifications'
+    | '/profile'
     | '/register'
+    | '/report'
+    | '/verify'
+    | '/admin/audit'
+    | '/admin/departments'
+    | '/admin/users'
+    | '/authority/issues'
     | '/reports/$id'
     | '/water-bodies/$id'
+    | '/admin'
+    | '/authority'
     | '/reports'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/analytics'
+    | '/dashboard'
     | '/explore'
     | '/how-it-works'
     | '/login'
     | '/map'
+    | '/notifications'
+    | '/profile'
     | '/register'
+    | '/report'
+    | '/verify'
+    | '/admin/audit'
+    | '/admin/departments'
+    | '/admin/users'
+    | '/authority/issues'
     | '/reports/$id'
     | '/water-bodies/$id'
+    | '/admin/'
+    | '/authority/'
     | '/reports/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AnalyticsRoute: typeof AnalyticsRoute
+  DashboardRoute: typeof DashboardRoute
   ExploreRoute: typeof ExploreRoute
   HowItWorksRoute: typeof HowItWorksRoute
   LoginRoute: typeof LoginRoute
   MapRoute: typeof MapRoute
+  NotificationsRoute: typeof NotificationsRoute
+  ProfileRoute: typeof ProfileRoute
   RegisterRoute: typeof RegisterRoute
+  ReportRoute: typeof ReportRoute
+  VerifyRoute: typeof VerifyRoute
+  AdminAuditRoute: typeof AdminAuditRoute
+  AdminDepartmentsRoute: typeof AdminDepartmentsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+  AuthorityIssuesRoute: typeof AuthorityIssuesRoute
   ReportsIdRoute: typeof ReportsIdRoute
   WaterBodiesIdRoute: typeof WaterBodiesIdRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  AuthorityIndexRoute: typeof AuthorityIndexRoute
   ReportsIndexRoute: typeof ReportsIndexRoute
 }
 
@@ -174,6 +330,20 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analytics': {
+      id: '/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/explore': {
@@ -204,11 +374,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MapRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/report': {
+      id: '/report'
+      path: '/report'
+      fullPath: '/report'
+      preLoaderRoute: typeof ReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify': {
+      id: '/verify'
+      path: '/verify'
+      fullPath: '/verify'
+      preLoaderRoute: typeof VerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/audit': {
+      id: '/admin/audit'
+      path: '/admin/audit'
+      fullPath: '/admin/audit'
+      preLoaderRoute: typeof AdminAuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/departments': {
+      id: '/admin/departments'
+      path: '/admin/departments'
+      fullPath: '/admin/departments'
+      preLoaderRoute: typeof AdminDepartmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/authority/': {
+      id: '/authority/'
+      path: '/authority'
+      fullPath: '/authority/'
+      preLoaderRoute: typeof AuthorityIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/authority/issues': {
+      id: '/authority/issues'
+      path: '/authority/issues'
+      fullPath: '/authority/issues'
+      preLoaderRoute: typeof AuthorityIssuesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reports/': {
@@ -238,13 +478,25 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AnalyticsRoute: AnalyticsRoute,
+  DashboardRoute: DashboardRoute,
   ExploreRoute: ExploreRoute,
   HowItWorksRoute: HowItWorksRoute,
   LoginRoute: LoginRoute,
   MapRoute: MapRoute,
+  NotificationsRoute: NotificationsRoute,
+  ProfileRoute: ProfileRoute,
   RegisterRoute: RegisterRoute,
+  ReportRoute: ReportRoute,
+  VerifyRoute: VerifyRoute,
+  AdminAuditRoute: AdminAuditRoute,
+  AdminDepartmentsRoute: AdminDepartmentsRoute,
+  AdminUsersRoute: AdminUsersRoute,
+  AuthorityIssuesRoute: AuthorityIssuesRoute,
   ReportsIdRoute: ReportsIdRoute,
   WaterBodiesIdRoute: WaterBodiesIdRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  AuthorityIndexRoute: AuthorityIndexRoute,
   ReportsIndexRoute: ReportsIndexRoute,
 }
 export const routeTree = rootRouteImport
