@@ -96,7 +96,7 @@ function ReportDetail() {
         <aside className="space-y-4">
           <div className="surface-card p-5">
             <h2 className="text-sm font-semibold">Accountability trail</h2>
-            <div className="mt-4"><Timeline events={data.timeline} current={data.status === "resolved" ? "done" : undefined} /></div>
+            <div className="mt-4"><Timeline events={data.timeline} {...(data.status === "resolved" ? { current: "done" } : {})} /></div>
           </div>
           <div className="surface-card p-5">
             <h2 className="text-sm font-semibold">Details</h2>
