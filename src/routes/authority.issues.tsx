@@ -32,8 +32,8 @@ export const Route = createFileRoute("/authority/issues")({
 function IssueManagement() {
   const [filters, setFilters] = useState<Record<string, string>>({ status: "all", severity: "all" });
   const { data, loading, error, retry, offline } = useAsync(
-    () => issueService.list({ status: filters.status as never, severity: filters.severity as never, sort: "severity" }),
-    [filters.status, filters.severity]);
+    () => issueService.list({ status: filters["status"] as never, severity: filters["severity"] as never, sort: "severity" }),
+    [filters["status"], filters["severity"]]);
   const depts = useAsync(() => userService.departments(), []);
   const [openId, setOpenId] = useState<string | null>(null);
   const [note, setNote] = useState("");

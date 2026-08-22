@@ -30,8 +30,8 @@ function ExplorePage() {
   const [view, setView] = useState<"grid" | "list">("grid");
 
   const { data, loading, error, retry, offline } = useAsync(
-    () => waterBodyService.list({ search, type: filters.type, taluka: filters.taluka, sort: filters.sort as never }),
-    [search, filters.type, filters.taluka, filters.sort],
+    () => waterBodyService.list({ search, type: filters["type"] ?? "all", taluka: filters["taluka"] ?? "all", sort: (filters["sort"] ?? "name") as never }),
+    [search, filters["type"], filters["taluka"], filters["sort"]],
   );
   const talukas = useAsync(() => waterBodyService.talukas(), []);
 
