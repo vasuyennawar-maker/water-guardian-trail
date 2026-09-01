@@ -60,6 +60,14 @@ export interface WaterBody {
   lastSurveyedAt: string;
   description: string;
   imageUrl?: string;
+  /** Optional enrichment fields — all safe-optional so older records still render. */
+  riverBasin?: string;
+  responsibleDepartment?: string;
+  pressures?: string[];
+  upstream?: { name: string; kind: string }[];
+  downstream?: { name: string; kind: string }[];
+  lastInspectionAt?: string;
+  illustrative?: boolean;
 }
 
 export interface Evidence {
@@ -77,6 +85,12 @@ export interface AIAssessment {
   reason: string;
   model: string;
   generatedAt: string;
+  /** Optional explainability fields. */
+  priorityScore?: number; // 0-100
+  evidenceConsidered?: string[];
+  priorityFactors?: { label: string; points: number; note?: string }[];
+  suggestedDepartment?: string;
+  recommendedChecks?: string[];
 }
 
 export interface TimelineEvent {
@@ -109,6 +123,11 @@ export interface Issue {
   actionNotes?: string[];
   resolutionEvidence?: Evidence[];
   timeline: TimelineEvent[];
+  assignedVerifier?: string;
+  dueAt?: string;
+  statusReason?: string;
+  resolutionRemarks?: string;
+  assignmentHistory?: { at: string; from?: string; to: string; by: string }[];
 }
 
 export interface AppUser {
@@ -129,6 +148,10 @@ export interface Department {
   responsibility: string;
   openAssignments: number;
   members: number;
+  overdueAssignments?: number;
+  resolvedAssignments?: number;
+  medianResolutionDays?: number;
+  slaCompliancePct?: number;
 }
 
 export interface AppNotification {
