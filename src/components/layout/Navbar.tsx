@@ -1,16 +1,17 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Droplets, Menu, X } from "lucide-react";
+import { Droplets, LogOut, Menu, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ROLE_LABEL, useRole } from "@/hooks/useRole";
 import type { Role } from "@/types";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 /** Role-aware navigation. UX only — server-side authorization comes later. */
 export const NAV: Record<Role, { to: string; label: string }[]> = {
@@ -27,27 +28,24 @@ export const NAV: Record<Role, { to: string; label: string }[]> = {
     { to: "/explore", label: "Water Bodies" },
     { to: "/reports", label: "My Reports" },
     { to: "/notifications", label: "Notifications" },
-    { to: "/profile", label: "Profile" },
   ],
   verifier: [
     { to: "/verify", label: "Verification Queue" },
     { to: "/map", label: "Map" },
+    { to: "/explore", label: "Water Bodies" },
     { to: "/notifications", label: "Notifications" },
   ],
   authority: [
     { to: "/authority", label: "Dashboard" },
     { to: "/authority/issues", label: "Issues" },
     { to: "/verify", label: "Verification" },
-    { to: "/explore", label: "Water Bodies" },
     { to: "/map", label: "Map" },
     { to: "/analytics", label: "Analytics" },
-    { to: "/notifications", label: "Notifications" },
   ],
   admin: [
     { to: "/admin", label: "Dashboard" },
     { to: "/admin/users", label: "Users" },
     { to: "/admin/departments", label: "Departments" },
-    { to: "/explore", label: "Water Bodies" },
     { to: "/authority/issues", label: "Reports" },
     { to: "/analytics", label: "Analytics" },
     { to: "/admin/audit", label: "Audit Logs" },
@@ -55,19 +53,19 @@ export const NAV: Record<Role, { to: string; label: string }[]> = {
 };
 
 export function Navbar() {
-  const { role, setRole, signOut } = useRole();
+  const { role, user, signOut } = useRole();
   const [open, setOpen] = useState(false);
   const links = NAV[role];
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-card/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="flex h-8 w-8 items-center justify-center rounded-[6px] bg-primary text-primary-foreground">
+        <Link to="/" className="flex min-w-0 items-center gap-2">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[6px] bg-primary text-primary-foreground">
             <Droplets className="h-4 w-4" aria-hidden />
           </span>
-          <span className="leading-tight">
-            <span className="block text-sm font-semibold">Digital Water Genome</span>
+          <span className="min-w-0 leading-tight">
+            <span className="block truncate text-sm font-semibold">Digital Water Genome</span>
             <span className="block text-[11px] text-muted-foreground">Nashik District</span>
           </span>
         </Link>
@@ -87,23 +85,6 @@ export function Navbar() {
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
-          {/* Prototype role switcher — stands in for real authentication. */}
-          <Select value={role} onValueChange={(v) => setRole(v as Role)}>
-            <SelectTrigger
-              aria-label="Switch role (prototype)"
-              className="hidden h-9 w-[11.5rem] rounded-[6px] text-xs sm:flex"
-            >
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {(Object.keys(ROLE_LABEL) as Role[]).map((r) => (
-                <SelectItem key={r} value={r} className="text-xs">
-                  {ROLE_LABEL[r]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
           <Button asChild size="sm" className="hidden rounded-[6px] sm:inline-flex">
             <Link to="/report">Report an Issue</Link>
           </Button>
@@ -113,14 +94,37 @@ export function Navbar() {
               <Link to="/login">Login</Link>
             </Button>
           ) : (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="hidden rounded-[6px] sm:inline-flex"
-              onClick={signOut}
-            >
-              Sign out
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="hidden rounded-[6px] sm:inline-flex"
+                  aria-label="Account menu"
+                >
+                  <User className="mr-1.5 h-4 w-4" aria-hidden />
+                  <span className="max-w-[9rem] truncate">{user?.name ?? ROLE_LABEL[role]}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel className="font-normal">
+                  <span className="block text-sm font-medium">{user?.name ?? ROLE_LABEL[role]}</span>
+                  <span className="block text-xs text-muted-foreground">{ROLE_LABEL[role]}</span>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/profile">Profile</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/notifications">Notifications</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onSelect={() => signOut()}>
+                  <LogOut className="mr-2 h-4 w-4" aria-hidden />
+                  Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
 
           <button
@@ -156,18 +160,35 @@ export function Navbar() {
             >
               Report an Issue
             </Link>
-            <Select value={role} onValueChange={(v) => setRole(v as Role)}>
-              <SelectTrigger aria-label="Switch role (prototype)" className="mt-2 h-9 rounded-[6px] text-xs">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {(Object.keys(ROLE_LABEL) as Role[]).map((r) => (
-                  <SelectItem key={r} value={r} className="text-xs">
-                    {ROLE_LABEL[r]}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {role === "public" ? (
+              <Link
+                to="/login"
+                onClick={() => setOpen(false)}
+                className="mt-1 rounded-[6px] border border-border px-3 py-2 text-center text-sm font-medium"
+              >
+                Login
+              </Link>
+            ) : (
+              <>
+                <Link
+                  to="/profile"
+                  onClick={() => setOpen(false)}
+                  className="mt-1 rounded-[6px] px-3 py-2 text-sm text-muted-foreground hover:bg-muted"
+                >
+                  Profile ({ROLE_LABEL[role]})
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    signOut();
+                  }}
+                  className="rounded-[6px] px-3 py-2 text-left text-sm text-muted-foreground hover:bg-muted"
+                >
+                  Sign out
+                </button>
+              </>
+            )}
           </nav>
         </div>
       ) : null}
