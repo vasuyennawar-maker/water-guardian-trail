@@ -23,7 +23,7 @@ export const Route = createFileRoute("/notifications")({
 function NotificationsPage() {
   const { data, loading, error, retry, offline } = useAsync(() => notificationService.list(), []);
   return (
-    <PageLayout title="Notifications" lead="Every change of stage on reports you follow.">
+    <PageLayout allow={["citizen","verifier","authority","admin"]} title="Notifications" lead="Every change of stage on reports you follow.">
       {loading ? <CardListSkeleton rows={4} /> : null}
       {error ? <ErrorState message={error} onRetry={retry} offline={offline} /> : null}
       {data ? <NotificationPanel items={data} onMarkAllRead={() => { void notificationService.markAllRead(); toast.success("All notifications marked read"); }} /> : null}

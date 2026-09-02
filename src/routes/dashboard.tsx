@@ -27,7 +27,7 @@ function CitizenDashboard() {
   const recent = useAsync(() => issueService.list({ reportedBy: "Anjali Deshmukh" }), []);
 
   return (
-    <PageLayout title="Your dashboard" lead="What you have reported, and where each report currently stands."
+    <PageLayout allow={["citizen","admin"]} title="Your dashboard" lead="What you have reported, and where each report currently stands."
       actions={<Button asChild className="rounded-[6px]"><Link to="/report"><Plus className="mr-1.5 h-4 w-4" /> Report an Issue</Link></Button>}>
       {stats.loading ? <StatGridSkeleton /> : null}
       {stats.error ? <ErrorState message={stats.error} onRetry={stats.retry} offline={stats.offline} /> : null}

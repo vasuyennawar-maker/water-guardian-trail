@@ -23,7 +23,7 @@ export const Route = createFileRoute("/admin/audit")({
 function AdminAudit() {
   const { data, loading, error, retry, offline } = useAsync(() => userService.auditLog(), []);
   return (
-    <PageLayout title="Audit logs" lead="Every administrative and workflow action, timestamped and attributable.">
+    <PageLayout allow={["admin"]} title="Audit logs" lead="Every administrative and workflow action, timestamped and attributable.">
       {loading ? <TableSkeleton /> : null}
       {error ? <ErrorState message={error} onRetry={retry} offline={offline} /> : null}
       {data ? (

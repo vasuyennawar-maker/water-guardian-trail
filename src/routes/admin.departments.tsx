@@ -22,7 +22,7 @@ export const Route = createFileRoute("/admin/departments")({
 function AdminDepartments() {
   const { data, loading, error, retry, offline } = useAsync(() => userService.departments(), []);
   return (
-    <PageLayout title="Departments" lead="Who is responsible for what, and how much is currently on their desk.">
+    <PageLayout allow={["admin"]} title="Departments" lead="Who is responsible for what, and how much is currently on their desk.">
       {loading ? <TableSkeleton rows={4} /> : null}
       {error ? <ErrorState message={error} onRetry={retry} offline={offline} /> : null}
       {data ? (

@@ -41,7 +41,7 @@ function VerificationQueue() {
   }
 
   return (
-    <PageLayout title="Verification queue" lead="Reports awaiting a field decision, highest estimated severity first.">
+    <PageLayout allow={["verifier","authority","admin"]} title="Verification queue" lead="Reports awaiting a field decision, highest estimated severity first.">
       {loading ? <CardListSkeleton rows={3} /> : null}
       {error ? <ErrorState message={error} onRetry={retry} offline={offline} /> : null}
       {!loading && !error && (data?.length ?? 0) === 0 ? (

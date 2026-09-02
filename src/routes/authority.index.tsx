@@ -30,7 +30,7 @@ function AuthorityDashboard() {
   const issues = useAsync(() => issueService.list({ sort: "severity" }), []);
 
   return (
-    <PageLayout title="Department dashboard" lead="Framed as next actions, not as counts.">
+    <PageLayout allow={["authority","admin"]} title="Department dashboard" lead="Framed as next actions, not as counts.">
       {stats.loading ? <StatGridSkeleton /> : null}
       {stats.error ? <ErrorState message={stats.error} onRetry={stats.retry} offline={stats.offline} /> : null}
       {stats.data ? (
