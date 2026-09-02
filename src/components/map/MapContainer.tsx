@@ -21,7 +21,7 @@ export function MapContainer(props: MapContainerProps) {
     <div className={cn("relative h-full w-full overflow-hidden bg-water-soft", props.className)}>
       <ClientOnly fallback={<MapSkeleton />}>
         <Suspense fallback={<MapSkeleton />}>
-          <LeafletMap {...props} className={undefined as unknown as string} />
+          <LeafletMap {...props} />
         </Suspense>
       </ClientOnly>
     </div>
