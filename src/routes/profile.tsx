@@ -27,11 +27,11 @@ export const Route = createFileRoute("/profile")({
 
 function ProfilePage() {
   const { data, loading, error, retry } = useAsync(() => userService.profile(), []);
-  if (loading) return <PageLayout><Skeleton className="h-64 w-full rounded-[10px]" /></PageLayout>;
-  if (error || !data) return <PageLayout><ErrorState message={error ?? "Profile unavailable."} onRetry={retry} /></PageLayout>;
+  if (loading) return <PageLayout allow={["citizen","verifier","authority","admin"]}><Skeleton className="h-64 w-full rounded-[10px]" /></PageLayout>;
+  if (error || !data) return <PageLayout allow={["citizen","verifier","authority","admin"]}><ErrorState message={error ?? "Profile unavailable."} onRetry={retry} /></PageLayout>;
 
   return (
-    <PageLayout title="Profile" lead="Your account details.">
+    <PageLayout allow={["citizen","verifier","authority","admin"]} title="Profile" lead="Your account details.">
       <div className="grid max-w-3xl gap-6 sm:grid-cols-2">
         <form className="surface-card space-y-4 p-5" onSubmit={(e) => { e.preventDefault(); toast.success("Profile updated"); }}>
           <div><Label htmlFor="n">Name</Label><Input id="n" defaultValue={data.name} className="mt-1.5 rounded-[6px]" /></div>

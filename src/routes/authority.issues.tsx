@@ -40,7 +40,7 @@ function IssueManagement() {
   const [dept, setDept] = useState("");
 
   return (
-    <PageLayout title="Issue management" lead="View, assign, act, resolve — each step is recorded on the public trail.">
+    <PageLayout allow={["authority","admin"]} title="Issue management" lead="View, assign, act, resolve — each step is recorded on the public trail.">
       <div className="mb-5">
         <FilterPanel values={filters} onChange={(k, v) => setFilters((f) => ({ ...f, [k]: v }))} onReset={() => setFilters({ status: "all", severity: "all" })}
           filters={[

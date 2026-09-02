@@ -36,7 +36,7 @@ function MyReports() {
   const { data, loading, error, retry, offline } = useAsync(() => issueService.list({ status: tab as never }), [tab]);
 
   return (
-    <PageLayout title="My reports" lead="Every report you have filed, with its current stage in the accountability trail."
+    <PageLayout allow={["citizen","verifier","authority","admin"]} title="My reports" lead="Every report you have filed, with its current stage in the accountability trail."
       actions={<Button asChild className="rounded-[6px]"><Link to="/report">Report an Issue</Link></Button>}>
       <div className="mb-5 flex flex-wrap gap-1 rounded-[6px] border border-border bg-card p-1">
         {TABS.map((t) => (

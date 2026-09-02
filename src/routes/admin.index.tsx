@@ -30,7 +30,7 @@ function AdminDashboard() {
   const log = useAsync(() => userService.auditLog(), []);
 
   return (
-    <PageLayout title="Administration" lead="Registry, people and system activity.">
+    <PageLayout allow={["admin"]} title="Administration" lead="Registry, people and system activity.">
       {users.loading || wbs.loading ? <StatGridSkeleton /> : null}
       {users.error ? <ErrorState message={users.error} onRetry={users.retry} /> : null}
       {users.data && wbs.data && depts.data ? (

@@ -24,7 +24,7 @@ function AnalyticsPage() {
   const { data, loading, error, retry, offline } = useAsync(() => analyticsService.bundle(), []);
 
   return (
-    <PageLayout title="Analytics" lead="All figures below are illustrative sample data for demonstration, not official district statistics.">
+    <PageLayout allow={["authority","admin"]} title="Analytics" lead="All figures below are illustrative sample data for demonstration, not official district statistics.">
       {loading ? <StatGridSkeleton /> : null}
       {error ? <ErrorState message={error} onRetry={retry} offline={offline} /> : null}
       {data ? (

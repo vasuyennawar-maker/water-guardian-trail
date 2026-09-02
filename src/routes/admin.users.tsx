@@ -53,7 +53,7 @@ function AdminUsers() {
   }, [data, search, roleFilter, statusFilter]);
 
   return (
-    <PageLayout title="Users" lead="Accounts, roles and activation status.">
+    <PageLayout allow={["admin"]} title="Users" lead="Accounts, roles and activation status.">
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center">
         <SearchBar value={search} onChange={setSearch} placeholder="Search by name or email" className="sm:max-w-xs" />
         <Select value={roleFilter} onValueChange={setRoleFilter}>
