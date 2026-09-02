@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { Navbar } from "@/components/layout/Navbar";
+import { RoleGate } from "@/components/layout/RoleGate";
+import type { Role } from "@/types";
 
 export function PageLayout({
   children,
@@ -8,13 +10,17 @@ export function PageLayout({
   lead,
   actions,
   wide,
+  allow,
 }: {
   children: ReactNode;
   title?: string;
   lead?: string;
   actions?: ReactNode;
   wide?: boolean;
+  /** When set, the page body is only rendered for these roles (UX gate). */
+  allow?: Role[];
 }) {
+  const body = allow ? <RoleGate allow={allow}>{children}</RoleGate> : children;
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
