@@ -35,7 +35,7 @@ export function PageLayout({
               {actions}
             </header>
           ) : null}
-          {children}
+          {body}
         </div>
       </main>
       <SiteFooter />
