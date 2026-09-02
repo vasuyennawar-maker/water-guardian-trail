@@ -148,7 +148,7 @@ function AdminUsers() {
             : ""
         }
         confirmLabel={pendingActive?.active ? "Deactivate" : "Activate"}
-        destructive={pendingActive?.active}
+        destructive={pendingActive?.active === true}
         onConfirm={() => {
           if (!pendingActive) return;
           const next = !pendingActive.active;
