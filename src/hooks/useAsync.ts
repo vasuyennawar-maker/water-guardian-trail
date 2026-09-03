@@ -9,6 +9,15 @@ export function useAsync<T>(fn: () => Promise<T>, deps: unknown[] = []) {
 
   const retry = useCallback(() => setTick((t) => t + 1), []);
 
+  // Any write to the shared report store refreshes every data view, so a new
+  // citizen report shows up in the verification queue and authority list too.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onChange = () => setTick((t) => t + 1);
+    window.addEventListener("dwg:reports", onChange);
+    return () => window.removeEventListener("dwg:reports", onChange);
+  }, []);
+
   useEffect(() => {
     let cancelled = false;
     setLoading(true);

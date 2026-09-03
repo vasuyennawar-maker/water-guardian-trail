@@ -14,7 +14,18 @@ export type IssueStatus =
 
 export type Severity = "low" | "medium" | "high" | "critical";
 
-export type WaterBodyType = "river" | "dam" | "lake" | "pond" | "reservoir";
+export type WaterBodyType =
+  | "river"
+  | "tributary"
+  | "stream"
+  | "drain"
+  | "canal"
+  | "dam"
+  | "reservoir"
+  | "lake"
+  | "wetland"
+  | "pond"
+  | "kund";
 
 export type IssueCategory =
   | "waste_dumping"
@@ -25,6 +36,10 @@ export type IssueCategory =
   | "encroachment"
   | "illegal_discharge"
   | "water_obstruction"
+  | "agricultural_runoff"
+  | "siltation"
+  | "water_hyacinth"
+  | "religious_waste"
   | "other";
 
 export interface LatLng {
@@ -68,6 +83,14 @@ export interface WaterBody {
   downstream?: { name: string; kind: string }[];
   lastInspectionAt?: string;
   illustrative?: boolean;
+  /** Featured bodies are the default map view; others appear under "Show all". */
+  featured?: boolean;
+  /** Note shown when geometry is hand-approximated rather than surveyed GeoJSON. */
+  geometryNote?: string;
+  condition?: "good" | "fair" | "poor" | "critical";
+  /** Graph edges used by the Water Genome / Trace Water Path feature. */
+  upstreamIds?: string[];
+  downstreamIds?: string[];
 }
 
 export interface Evidence {
@@ -107,7 +130,11 @@ export interface Issue {
   title: string;
   description: string;
   category: IssueCategory;
+  /** Full multi-select list; `category` stays the primary for API compatibility. */
+  categories?: IssueCategory[];
   status: IssueStatus;
+  verificationStatus?: "pending" | "in_review" | "verified" | "rejected";
+  assignedVerifierId?: string | null;
   severity: Severity;
   waterBodyId: string;
   waterBodyName: string;

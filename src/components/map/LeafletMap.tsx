@@ -107,7 +107,7 @@ export default function LeafletMap({
     if (!m || !group) return;
     group.clearLayers();
 
-    const visibleBodies = waterBodies.filter((w) => layers[w.type]);
+    const visibleBodies = waterBodies;
     for (const wb of visibleBodies) {
       const pts = wb.geometry.map((p) => [p.lat, p.lng] as [number, number]);
       const shape =
@@ -121,7 +121,7 @@ export default function LeafletMap({
       });
       group.addLayer(shape);
 
-      if (layers.heatmap && wb.openIssues > 0) {
+      if (layers.sources && wb.openIssues > 0) {
         group.addLayer(
           L.circle([wb.center.lat, wb.center.lng], {
             radius: 800 + wb.openIssues * 500,
