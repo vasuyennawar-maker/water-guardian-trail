@@ -26,15 +26,40 @@ export const CATEGORY_LABEL: Record<IssueCategory, string> = {
   encroachment: "Encroachment",
   illegal_discharge: "Illegal discharge",
   water_obstruction: "Water obstruction",
+  agricultural_runoff: "Agricultural runoff",
+  siltation: "Siltation",
+  water_hyacinth: "Water hyacinth",
+  religious_waste: "Religious / floral waste",
   other: "Other",
 };
 
 export const WATER_BODY_LABEL: Record<WaterBodyType, string> = {
   river: "River",
+  tributary: "Tributary",
+  stream: "Stream",
+  drain: "Drain",
+  canal: "Canal",
   dam: "Dam",
-  lake: "Lake",
-  pond: "Pond",
   reservoir: "Reservoir",
+  lake: "Lake",
+  wetland: "Wetland",
+  pond: "Pond",
+  kund: "Kund",
+};
+
+/** Grouping used by the layers panel and the report-form water-body combobox. */
+export const WATER_BODY_GROUP: Record<WaterBodyType, string> = {
+  river: "Rivers",
+  tributary: "Tributaries",
+  stream: "Streams, drains & canals",
+  drain: "Streams, drains & canals",
+  canal: "Streams, drains & canals",
+  dam: "Dams & reservoirs",
+  reservoir: "Dams & reservoirs",
+  lake: "Lakes & wetlands",
+  wetland: "Lakes & wetlands",
+  pond: "Ponds & kunds",
+  kund: "Ponds & kunds",
 };
 
 export function formatDate(iso: string) {
