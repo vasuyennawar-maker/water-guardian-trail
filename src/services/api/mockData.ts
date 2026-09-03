@@ -30,7 +30,7 @@ const ring = (lat: number, lng: number, r: number) =>
     return { lat: +(lat + Math.sin(a) * r).toFixed(5), lng: +(lng + Math.cos(a) * r * 1.4).toFixed(5) };
   });
 
-export const WATER_BODIES: WaterBody[] = [
+const BASE_BODIES: WaterBody[] = [
   {
     id: "wb-godavari",
     name: "Godavari River",
@@ -356,6 +356,253 @@ export const WATER_BODIES: WaterBody[] = [
     downstream: [{ name: "Kadva River", kind: "river" }],
     lastInspectionAt: "2026-07-16T00:00:00Z",
     illustrative: true,
+  },
+];
+
+const line = (pts: [number, number][]) => pts.map(([lat, lng]) => ({ lat, lng }));
+
+const APPROX = "Approximate prototype geometry — not survey-grade GeoJSON.";
+
+/**
+ * Additional records that make the dataset a connected water NETWORK rather
+ * than a list of dams: a tributary river, sacred kunds, and the stream / drain
+ * / canal links that carry pollution between them.
+ */
+const NETWORK_BODIES: WaterBody[] = [
+  {
+    id: "wb-darna-river",
+    name: "Darna River",
+    type: "tributary",
+    regionId: "nashik",
+    taluka: "Nashik / Igatpuri",
+    center: { lat: 19.9151, lng: 73.7742 },
+    geometry: line([
+      [19.8298, 73.6788],
+      [19.8622, 73.7042],
+      [19.8951, 73.7381],
+      [19.9264, 73.7822],
+      [19.9531, 73.8266],
+      [19.9702, 73.8688],
+    ]),
+    lengthKm: 34,
+    healthScore: 61,
+    openIssues: 3,
+    resolvedIssues: 5,
+    lastSurveyedAt: "2026-06-28T00:00:00Z",
+    description:
+      "Left-bank tributary of the Godavari, released from Darna Reservoir and joining the main stem downstream of Nashik city.",
+    riverBasin: "Godavari Basin",
+    responsibleDepartment: "Irrigation Department — Nashik",
+    pressures: ["Agricultural runoff", "Sand extraction on the bed"],
+    upstream: [{ name: "Darna Reservoir", kind: "reservoir" }],
+    downstream: [{ name: "Godavari River", kind: "river" }],
+    upstreamIds: ["wb-darna"],
+    downstreamIds: ["wb-godavari"],
+    lastInspectionAt: "2026-07-22T00:00:00Z",
+    illustrative: true,
+    featured: true,
+    geometryNote: APPROX,
+    condition: "fair",
+  },
+  {
+    id: "wb-kushavart",
+    name: "Kushavart Kund",
+    localName: "कुशावर्त तीर्थ",
+    type: "kund",
+    regionId: "nashik",
+    taluka: "Trimbakeshwar",
+    center: { lat: 19.9328, lng: 73.5296 },
+    geometry: ring(19.9328, 73.5296, 0.0022),
+    areaSqKm: 0.01,
+    healthScore: 44,
+    openIssues: 4,
+    resolvedIssues: 8,
+    lastSurveyedAt: "2026-07-12T00:00:00Z",
+    description:
+      "Sacred kund at Trimbakeshwar, treated as the symbolic origin of the Godavari. Very high pilgrim footfall and concentrated ritual waste load.",
+    riverBasin: "Godavari Basin",
+    responsibleDepartment: "Trimbakeshwar Nagar Panchayat",
+    pressures: ["Ritual and floral waste", "Pilgrim footfall", "Soap and oil residues"],
+    upstream: [{ name: "Brahmagiri hill springs", kind: "catchment" }],
+    downstream: [{ name: "Godavari River", kind: "river" }],
+    downstreamIds: ["wb-godavari"],
+    lastInspectionAt: "2026-08-04T00:00:00Z",
+    illustrative: true,
+    featured: true,
+    geometryNote: APPROX,
+    condition: "poor",
+  },
+  {
+    id: "wb-tapovan-drain",
+    name: "Tapovan Nalla (storm drain)",
+    type: "drain",
+    regionId: "nashik",
+    taluka: "Nashik City",
+    center: { lat: 20.0164, lng: 73.8082 },
+    geometry: line([
+      [20.0231, 73.7981],
+      [20.0188, 73.8046],
+      [20.0132, 73.8138],
+      [20.0098, 73.8202],
+    ]),
+    lengthKm: 3.2,
+    healthScore: 22,
+    openIssues: 5,
+    resolvedIssues: 2,
+    lastSurveyedAt: "2026-08-01T00:00:00Z",
+    description:
+      "Urban nalla carrying mixed storm and greywater flow into the Godavari near the Tapovan bank.",
+    riverBasin: "Godavari Basin",
+    responsibleDepartment: "NMC — Sewerage",
+    pressures: ["Illegal greywater connections", "Solid waste choking"],
+    upstream: [{ name: "Panchavati ward drainage", kind: "catchment" }],
+    downstream: [{ name: "Godavari River", kind: "river" }],
+    downstreamIds: ["wb-godavari"],
+    lastInspectionAt: "2026-08-06T00:00:00Z",
+    illustrative: true,
+    featured: true,
+    geometryNote: APPROX,
+    condition: "critical",
+  },
+  {
+    id: "wb-dindori-stream",
+    name: "Dindori feeder stream",
+    type: "stream",
+    regionId: "nashik",
+    taluka: "Dindori",
+    center: { lat: 20.2216, lng: 73.8402 },
+    geometry: line([
+      [20.2482, 73.8121],
+      [20.2338, 73.8266],
+      [20.2172, 73.8402],
+      [20.2038, 73.8571],
+    ]),
+    lengthKm: 6.4,
+    healthScore: 54,
+    openIssues: 2,
+    resolvedIssues: 1,
+    lastSurveyedAt: "2026-06-22T00:00:00Z",
+    description:
+      "Seasonal stream draining vineyard and orchard land into the Kadva River.",
+    riverBasin: "Godavari Basin",
+    responsibleDepartment: "Zilla Parishad — Water Supply",
+    pressures: ["Agricultural runoff", "Pesticide residues"],
+    upstream: [{ name: "Dindori hill slopes", kind: "catchment" }],
+    downstream: [{ name: "Kadva River", kind: "river" }],
+    downstreamIds: ["wb-kadva"],
+    lastInspectionAt: "2026-07-02T00:00:00Z",
+    illustrative: true,
+    featured: true,
+    geometryNote: APPROX,
+    condition: "fair",
+  },
+  {
+    id: "wb-gangapur-canal",
+    name: "Gangapur left-bank canal",
+    type: "canal",
+    regionId: "nashik",
+    taluka: "Nashik",
+    center: { lat: 20.0092, lng: 73.7042 },
+    geometry: line([
+      [20.0186, 73.6702],
+      [20.0141, 73.6902],
+      [20.0072, 73.7124],
+      [20.0021, 73.7361],
+    ]),
+    lengthKm: 9.8,
+    healthScore: 63,
+    openIssues: 1,
+    resolvedIssues: 3,
+    lastSurveyedAt: "2026-06-18T00:00:00Z",
+    description:
+      "Irrigation canal drawing from Gangapur Reservoir towards the Satpur and Ambad belt.",
+    riverBasin: "Godavari Basin",
+    responsibleDepartment: "Irrigation Department — Nashik",
+    pressures: ["Siltation", "Roadside dumping along the bund"],
+    upstream: [{ name: "Gangapur Dam", kind: "dam" }],
+    downstream: [{ name: "Waldevi Dam command area", kind: "canal" }],
+    upstreamIds: ["wb-gangapur"],
+    downstreamIds: ["wb-waldevi"],
+    lastInspectionAt: "2026-07-08T00:00:00Z",
+    illustrative: true,
+    featured: true,
+    geometryNote: APPROX,
+    condition: "fair",
+  },
+];
+
+/**
+ * Default map view = the connected core network. Secondary dams stay in the
+ * dataset (never deleted) but are hidden until "Show all water bodies".
+ */
+const FEATURED_IDS = new Set([
+  "wb-gangapur",
+  "wb-darna",
+  "wb-godavari",
+  "wb-darna-river",
+  "wb-kadva",
+  "wb-nandur",
+  "wb-ramkund",
+  "wb-kushavart",
+]);
+
+const RECLASSIFY: Record<string, Partial<WaterBody>> = {
+  "wb-godavari": {
+    condition: "poor",
+    upstreamIds: ["wb-gangapur", "wb-kushavart"],
+    downstreamIds: ["wb-ramkund", "wb-nandur"],
+  },
+  "wb-gangapur": {
+    type: "reservoir",
+    name: "Gangapur Dam & Reservoir",
+    condition: "good",
+    upstreamIds: ["wb-kashyapi", "wb-gautami"],
+    downstreamIds: ["wb-godavari", "wb-gangapur-canal"],
+  },
+  "wb-darna": { condition: "fair", downstreamIds: ["wb-darna-river"] },
+  "wb-nandur": {
+    type: "wetland",
+    name: "Nandur Madhmeshwar Wetland",
+    condition: "fair",
+    upstreamIds: ["wb-kadva", "wb-godavari"],
+    downstreamIds: [],
+  },
+  "wb-ramkund": {
+    type: "kund",
+    name: "Ramkund",
+    condition: "poor",
+    upstreamIds: ["wb-godavari", "wb-tapovan-drain"],
+    downstreamIds: ["wb-godavari"],
+  },
+  "wb-kadva": {
+    type: "river",
+    condition: "fair",
+    upstreamIds: ["wb-dindori-stream"],
+    downstreamIds: ["wb-nandur"],
+  },
+  "wb-waldevi": { condition: "poor" },
+};
+
+export const WATER_BODIES: WaterBody[] = [...BASE_BODIES, ...NETWORK_BODIES].map((wb) => ({
+  ...wb,
+  ...(RECLASSIFY[wb.id] ?? {}),
+  featured: FEATURED_IDS.has(wb.id) || wb.featured === true,
+  geometryNote: wb.geometryNote ?? APPROX,
+}));
+
+/**
+ * Prototype connectivity traces used by "Trace Water Path".
+ */
+export const WATER_PATHS: { id: string; label: string; bodyIds: string[] }[] = [
+  {
+    id: "path-godavari-ramkund",
+    label: "Kushavart → Godavari → Gangapur Reservoir → Nashik City → Ramkund",
+    bodyIds: ["wb-kushavart", "wb-godavari", "wb-gangapur", "wb-tapovan-drain", "wb-ramkund"],
+  },
+  {
+    id: "path-kadva-nandur",
+    label: "Dindori stream / drain → Kadva River → Nandur Madhmeshwar → Godavari downstream",
+    bodyIds: ["wb-dindori-stream", "wb-kadva", "wb-nandur", "wb-godavari"],
   },
 ];
 
