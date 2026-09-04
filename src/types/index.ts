@@ -211,3 +211,100 @@ export interface AnalyticsBundle {
   active: number;
   resolved: number;
 }
+
+/* ---------------------------------------------------------------------------
+ * GIS layer additions: pollution sources and administrative boundaries.
+ * ------------------------------------------------------------------------ */
+
+export type PollutionSourceCategory =
+  | "sewage_outfall"
+  | "industrial_effluent"
+  | "solid_waste"
+  | "agricultural_runoff"
+  | "religious_offering"
+  | "other";
+
+export interface PollutionSource {
+  id: string;
+  name: string;
+  category: PollutionSourceCategory;
+  status: "suspected" | "verified";
+  location: LatLng;
+  waterBodyId: string;
+  waterBodyName: string;
+  relatedIssueIds: string[];
+  lastVerifiedAt?: string;
+  note?: string;
+}
+
+export type BoundaryKind = "taluka" | "catchment" | "jurisdiction";
+
+export interface BoundaryArea {
+  id: string;
+  kind: BoundaryKind;
+  name: string;
+  /** Department shown for jurisdiction boundaries. */
+  department?: string;
+  polygon: LatLng[];
+  /** Talukas contained/covered — used to count active issues in the area. */
+  talukas: string[];
+  note?: string;
+}
+
+/* ---------------------------------------------------------------------------
+ * Field verification record (Field Verifier workflow).
+ * ------------------------------------------------------------------------ */
+
+export interface FieldVerification {
+  issueId: string;
+  decision: "verified" | "rejected" | "inconclusive";
+  visitedAt: string;
+  waterBodyId: string;
+  waterBodyName: string;
+  confirmedSeverity: Severity;
+  confirmedCategories: IssueCategory[];
+  observations: string;
+  correctedLocation?: LatLng;
+  evidence: Evidence[];
+  suggestedDepartment?: string;
+  labTestingRequested: boolean;
+  remarks?: string;
+  verifierName: string;
+  recordedAt: string;
+}
+
+/* ---------------------------------------------------------------------------
+ * Community discussion (public observations — NOT official reports).
+ * ------------------------------------------------------------------------ */
+
+export interface CommunityComment {
+  id: string;
+  postId: string;
+  authorName: string;
+  authorRole: Role;
+  body: string;
+  at: string;
+  official?: boolean;
+  hidden?: boolean;
+}
+
+export interface CommunityPost {
+  id: string;
+  waterBodyId: string;
+  waterBodyName: string;
+  authorName: string;
+  authorRole: Role;
+  title: string;
+  body: string;
+  imageUrl?: string;
+  linkedIssueId?: string;
+  at: string;
+  likes: number;
+  likedByMe?: boolean;
+  /** Only verifier/authority authors may mark an update as verified. */
+  verifiedUpdate?: boolean;
+  reported?: boolean;
+  reportCount?: number;
+  hidden?: boolean;
+  comments: CommunityComment[];
+}
