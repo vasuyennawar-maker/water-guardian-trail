@@ -122,9 +122,22 @@ export const mapService = {
   async region(): Promise<Region> {
     return request("/map/region", () => NASHIK);
   },
-  async features(): Promise<{ waterBodies: WaterBody[]; issues: Issue[] }> {
-    return request("/map/features", () => ({ waterBodies: WATER_BODIES, issues: allIssues() }));
+  async features(): Promise<{
+    waterBodies: WaterBody[];
+    issues: Issue[];
+    sources: PollutionSource[];
+    boundaries: BoundaryArea[];
+  }> {
+    return request("/map/features", () => {
+      const issues = allIssues();
+      const sources = POLLUTION_SOURCES.map((s) => ({
+        ...s,
+        relatedIssueIds: issues.filter((i) => i.waterBodyId === s.waterBodyId).map((i) => i.id).slice(0, 4),
+      }));
+      return { waterBodies: WATER_BODIES, issues, sources, boundaries: BOUNDARIES };
+    });
   },
+
   /** MOCK geolocation label lookup (a real backend would reverse geocode). */
   async reverseGeocode(point: LatLng): Promise<string> {
     return request("/map/reverse-geocode", () => {
