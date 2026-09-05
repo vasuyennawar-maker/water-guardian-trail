@@ -196,8 +196,8 @@ export default function LeafletMap({
 
     /* --- Water bodies --- */
     for (const wb of visibleBodies(waterBodies, layers)) {
-      const style = (GEOMETRY_STYLE as Record<string, { color: string; weight?: number; fill?: string; dashArray?: string }>)[wb.type] ??
-        GEOMETRY_STYLE.lake;
+      const style: GeometryStyle =
+        GEOMETRY_STYLE[wb.type] ?? { color: "#12A5C4", fill: "#22C0DC", label: "Water body" };
       const selected = selId === wb.id;
       const pts = wb.geometry.map((p) => [p.lat, p.lng] as [number, number]);
       const shape = LINEAR.has(wb.type)
@@ -268,7 +268,7 @@ export default function LeafletMap({
       cluster.on("clusterclick", (e) => {
         const children = e.layer.getAllChildMarkers();
         const contained = children
-          .map((c) => byId.get(c.options.alt ?? ""))
+          .map((c: { options: { alt?: string } }) => byId.get(c.options.alt ?? ""))
           .filter(Boolean) as Issue[];
         const top = contained.reduce<Severity>(
           (acc, i) => (SEV_RANK[i.severity] > SEV_RANK[acc] ? i.severity : acc),
