@@ -28,8 +28,16 @@ export const SEV_COLOR: Record<Severity, string> = {
   critical: "#B3261E",
 };
 
+export interface GeometryStyle {
+  color: string;
+  weight?: number;
+  fill?: string;
+  dashArray?: string;
+  label: string;
+}
+
 /** One shared style table for geometry — the legend renders from this. */
-export const GEOMETRY_STYLE = {
+export const GEOMETRY_STYLE: Record<string, GeometryStyle> = {
   river: { color: "#0B4F8C", weight: 5, label: "Major river" },
   tributary: { color: "#5FB4E5", weight: 2.5, label: "Tributary" },
   stream: { color: "#5FB4E5", weight: 2, label: "Stream" },
@@ -41,7 +49,7 @@ export const GEOMETRY_STYLE = {
   wetland: { color: "#0E8C7F", fill: "#14A594", label: "Wetland" },
   reservoir: { color: "#0A3D73", fill: "#12508F", label: "Reservoir" },
   dam: { color: "#0A3D73", fill: "#12508F", label: "Dam" },
-} as const;
+};
 
 export const BOUNDARY_STYLE = {
   taluka: { color: "#7A6A55", dashArray: "6 5" },
@@ -188,8 +196,8 @@ export default function LeafletMap({
 
     /* --- Water bodies --- */
     for (const wb of visibleBodies(waterBodies, layers)) {
-      const style = (GEOMETRY_STYLE as Record<string, { color: string; weight?: number; fill?: string; dashArray?: string }>)[wb.type] ??
-        GEOMETRY_STYLE.lake;
+      const style: GeometryStyle =
+        GEOMETRY_STYLE[wb.type] ?? { color: "#12A5C4", fill: "#22C0DC", label: "Water body" };
       const selected = selId === wb.id;
       const pts = wb.geometry.map((p) => [p.lat, p.lng] as [number, number]);
       const shape = LINEAR.has(wb.type)
@@ -260,7 +268,7 @@ export default function LeafletMap({
       cluster.on("clusterclick", (e) => {
         const children = e.layer.getAllChildMarkers();
         const contained = children
-          .map((c) => byId.get(c.options.alt ?? ""))
+          .map((c: { options: { alt?: string } }) => byId.get(c.options.alt ?? ""))
           .filter(Boolean) as Issue[];
         const top = contained.reduce<Severity>(
           (acc, i) => (SEV_RANK[i.severity] > SEV_RANK[acc] ? i.severity : acc),

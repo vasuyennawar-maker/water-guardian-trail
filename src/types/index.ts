@@ -155,6 +155,8 @@ export interface Issue {
   statusReason?: string;
   resolutionRemarks?: string;
   assignmentHistory?: { at: string; from?: string; to: string; by: string }[];
+  /** Completed field-verification record (Field Verifier workflow). */
+  fieldVerification?: FieldVerification;
 }
 
 export interface AppUser {

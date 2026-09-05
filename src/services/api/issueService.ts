@@ -1,4 +1,4 @@
-import type { Issue, IssueCategory, IssueStatus, Severity } from "@/types";
+import type { FieldVerification, Issue, IssueCategory, IssueStatus, Severity } from "@/types";
 import { addIssue, allIssues, notifyReportsChanged, updateIssue } from "./reportStore";
 import { request } from "./client";
 
@@ -49,12 +49,95 @@ export const issueService = {
     });
   },
 
-  async verificationQueue(): Promise<Issue[]> {
-    return request("/issues/verification-queue", () =>
-      allIssues().filter((i) => i.status === "reported" || i.status === "under_verification").sort(
-        (a, b) => SEV_ORDER[a.severity] - SEV_ORDER[b.severity],
-      ),
-    );
+  /**
+   * Verification queues. `pending` holds every unassigned report awaiting a
+   * field decision; `mine` holds reports claimed by this verifier; `completed`
+   * holds reports this verifier has already decided.
+   */
+  async verificationQueue(verifierId?: string): Promise<{
+    pending: Issue[];
+    mine: Issue[];
+    completed: Issue[];
+  }> {
+    return request("/issues/verification-queue", () => {
+      const rows = allIssues();
+      const bySeverity = (a: Issue, b: Issue) => SEV_ORDER[a.severity] - SEV_ORDER[b.severity];
+      const open = rows.filter(
+        (i) => i.status === "reported" || i.status === "under_verification",
+      );
+      return {
+        pending: open.filter((i) => !i.assignedVerifierId).sort(bySeverity),
+        mine: open.filter((i) => verifierId && i.assignedVerifierId === verifierId).sort(bySeverity),
+        completed: rows
+          .filter(
+            (i) =>
+              (i.verificationStatus === "verified" || i.verificationStatus === "rejected") &&
+              (!verifierId || i.assignedVerifierId === verifierId),
+          )
+          .sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt))
+          .slice(0, 25),
+      };
+    });
+  },
+
+  /** Claim a report so it moves out of the general queue into "Assigned to me". */
+  async startVerification(id: string, verifierId: string, verifierName: string) {
+    return request("/issues/" + id + "/start-verification", () => {
+      const issue = allIssues().find((i) => i.id === id);
+      updateIssue(id, {
+        status: "under_verification",
+        verificationStatus: "in_review",
+        assignedVerifierId: verifierId,
+        timeline: [
+          ...(issue?.timeline ?? []),
+          {
+            id: `t-${Date.now()}`,
+            stage: "under_verification",
+            label: "Verification started",
+            actor: verifierName,
+            at: new Date().toISOString(),
+          },
+        ],
+      });
+      return { id };
+    }, 400);
+  },
+
+  /** Persist a completed field verification onto the shared report. */
+  async recordVerification(v: FieldVerification) {
+    return request("/issues/" + v.issueId + "/field-verification", () => {
+      const issue = allIssues().find((i) => i.id === v.issueId);
+      const status: IssueStatus = v.decision === "verified" ? "verified" : v.decision === "rejected" ? "rejected" : "under_verification";
+      updateIssue(v.issueId, {
+        status,
+        verificationStatus:
+          v.decision === "verified" ? "verified" : v.decision === "rejected" ? "rejected" : "in_review",
+        severity: v.confirmedSeverity,
+        category: v.confirmedCategories[0] ?? issue?.category ?? "other",
+        categories: v.confirmedCategories,
+        ...(v.correctedLocation ? { location: v.correctedLocation } : {}),
+        verificationNote: v.observations,
+        evidence: [...(issue?.evidence ?? []), ...v.evidence],
+        fieldVerification: v,
+        timeline: [
+          ...(issue?.timeline ?? []),
+          {
+            id: `t-${Date.now()}`,
+            stage: status === "rejected" ? "rejected" : status,
+            label:
+              v.decision === "verified"
+                ? "Field-verified"
+                : v.decision === "rejected"
+                  ? "Rejected after field visit"
+                  : "Field visit inconclusive",
+            actor: v.verifierName,
+            note: v.observations,
+            at: v.recordedAt,
+          },
+        ],
+      });
+      return { id: v.issueId };
+    }, 600);
   },
 
   async citizenStats(reporter: string) {
